@@ -1,6 +1,6 @@
 # GitHub Contribution Bot 🤖
 
-Automate your GitHub contribution graph with intelligent daily commits. This bot generates random contributions to keep your GitHub profile active and engaging.
+Automate your GitHub contribution graph with intelligent daily commits and random issue creation. This bot runs on **GitHub Actions** to keep your profile active effortlessly.
 
 ## 📊 Before & After
 
@@ -18,79 +18,54 @@ Automate your GitHub contribution graph with intelligent daily commits. This bot
 
 ## ✨ Features
 
-- **Automated Daily Commits**: Random commits (1-10 per day) to maintain consistent activity
-- **Customizable Schedule**: Runs continuously and checks for date changes
-- **Private Repository Support**: Works seamlessly with private repos
-- **Easy Configuration**: Simple path setup and execution
+- **Automated Daily Commits**: Random commits (1-10 per day) directly to the repository.
+- **Random Issue Creation**: 20% chance to create a random issue to simulate deeper activity.
+- **GitHub Actions Support**: Runs automatically in the cloud. No need to keep your PC on.
+- **Easy Setup**: Just Fork and Enable!
 
-## 🚀 Quick Start
+## 🚀 Quick Start (GitHub Actions)
 
-### Prerequisites
-- Python 3.x installed
-- Git configured on your system
-- GitHub account
+1. **Fork this repository** to your own GitHub account.
+2. Go to the **Actions** tab in your forked repository.
+3. If prompt appears, click **"I understand my workflows, go ahead and enable them"**.
+4. The bot will now run automatically every day at 02:30 UTC.
 
-### Installation
+(Optional) To trigger it immediately:
+- Go to **Actions** -> **Daily Contribution**.
+- Click **Run workflow**.
 
-1. **Clone this repository**
+## 💻 Manual / Local Usage
+
+If you prefer to run it locally:
+
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/yourusername/GitHub_Contributor_bot.git
    cd GitHub_Contributor_bot
    ```
 
-2. **Install dependencies**
+2. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Create a private repository**
-   - Go to GitHub and create a new private repository
-   - Clone it to your local machine
-
-4. **Setup the bot**
-   - Copy `Automator.py` to your private repository
-   - Create a text file named `updator.txt` in the same directory
-
-5. **Configure paths**
-   - Open `Automator.py` in a text editor
-   - Update line 37 with your repository path:
-     ```python
-     repo_path = r"C:\Your\Path\To\Repository"
-     ```
-
-6. **Run the bot**
+3. **Run the bot**:
    ```bash
    python Automator.py
    ```
-
-## 📝 How It Works
-
-1. The bot runs continuously in the background
-2. Each day, it generates a random number (1-10) of commits
-3. For each commit, it appends text to `updator.txt`
-4. Changes are automatically committed and pushed to GitHub
-5. Your contribution graph updates accordingly
+   *Note: For Issue creation to work locally, you must set `GITHUB_TOKEN` and `GITHUB_REPOSITORY` environment variables.*
 
 ## ⚙️ Configuration
 
-You can customize the bot by modifying these parameters in `Automator.py`:
+You can customize the bot by editing `Automator.py`:
 
-- **Commit frequency**: Change `random.randint(1, 10)` on line 28
-- **Branch name**: Modify `branch = "main"` on line 48
-- **Commit message**: Edit `commit_message` on line 56
+- **Commit frequency**: Change `random.randint(1, 10)` in `main()`.
+- **Issue chance**: Change `if random.random() < 0.2:` (currently 20%).
 
 ## ⚠️ Important Notes
 
-- **Use a private repository** to keep automated commits separate from your actual work
-- **Ensure Git credentials** are configured to avoid authentication prompts
-- **Run as background process** for continuous operation
-- This is for educational purposes; use responsibly
-
-## 📋 Requirements
-
-```
-gitpython==3.1.30
-```
+- **Educational Purpose**: This tool is for demonstration and testing.
+- **Green Activity Bar**: Helps fill up your contribution graph.
 
 ## 🤝 Contributing
 
@@ -101,27 +76,9 @@ Contributions are welcome! Feel free to:
 
 ## 📄 License
 
-This project is open source and available for educational purposes.
+This project is open source.
 
 ## 👤 Author
 
 **Pareekshith P**
 - GitHub: [@Pareekshith1](https://github.com/Pareekshith1)
-
-## 🙏 Acknowledgments
-
-Built with Python and GitPython library for seamless Git automation.
-
-**Image Credits:**
-- Before image: [Adrian Roselli](https://adrianroselli.com/wp-content/uploads/2018/02/GitHub-chart_scrollbar.png)
-- After image: [Medium Article](https://miro.medium.com/v2/resize:fit:1100/format:webp/1*1tUp8vKCZDVtNIJY6A-Ilg.png)
-
----
-
-<div align="center">
-
-**Note:** The before/after contribution chart images shown above are for reference purposes only to demonstrate the potential impact of using this bot.
-
-Made with ❤️ for the GitHub community
-
-</div>
