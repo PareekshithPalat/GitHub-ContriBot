@@ -28,8 +28,8 @@ jobs:
 
             - name: Configure Git
               run: |
-                  git config --global user.name 'GitHub-ContriBot'
-                  git config --global user.email 'bot@noreply.github.com'
+                  git config --global user.name "${{ secrets.COMMIT_USERNAME }}"
+                  git config --global user.email "${{ secrets.COMMIT_EMAIL }}"
 
             - name: Run Automator Script
               env:

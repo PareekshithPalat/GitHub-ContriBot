@@ -1,6 +1,5 @@
 ''' 
 Author : Pareekshith1 {Pareekshith.P} 
-Modified by: Antigravity
 '''
 import os
 import random
