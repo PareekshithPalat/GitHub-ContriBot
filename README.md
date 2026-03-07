@@ -1,5 +1,3 @@
-![GitHub-ContriBot Banner](assets/banner.png)
-
 <div align="center">
 
 # GitHub-ContriBot
@@ -75,8 +73,8 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 ## Author
 
 **Pareekshith Palat**
--   **GitHub**: [@Pareekshith1](https://github.com/Pareekshith1)
--   **Email**: [Your Email Here]
+-   **GitHub**: [@Pareekshithpalat](https://github.com/Pareekshith1)
+-   **Email**: pareekshithpalat@gmail.com
 
 ---
 *Disclaimer: Use this tool responsibly. It is designed for environment testing and profile maintenance.*
