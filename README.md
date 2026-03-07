@@ -66,6 +66,10 @@ Custom parameters can be adjusted in `Automator.py`:
 | Time Slots | `["04:30", "15:30"]` | Defines the allowed UTC execution windows. |
 | Labels | `labels=["updation"]` | Sets the default labels for issues and PRs. |
 
+## Support the Project
+
+If GitHub-ContriBot has added value to your workflow or profile management, please consider giving this repository a **Star** ⭐. Your support helps increase the project's visibility and encourages continued maintenance and feature development.
+
 ## License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for full details.
