@@ -28,12 +28,23 @@ def get_random_comment():
     return random.choice(comments)
 
 def main():
+    # 0. Time-based restriction (10:00 AM & 9:00 PM IST)
+    # 10:00 IST = 04:30 UTC
+    # 21:00 IST = 15:30 UTC
+    now = datetime.utcnow()
+    current_time_str = now.strftime("%H:%M")
+    
+    # Strictly allow only 04:30 and 15:30 UTC
+    if current_time_str not in ["04:30", "15:30"]:
+        print(f"Current time {current_time_str} UTC is not in allowed slots (04:30 or 15:30 UTC). Exiting.")
+        return
+
     token = os.environ.get("PAT_TOKEN")
     repo_name = os.environ.get("GITHUB_REPOSITORY")
     gh_username = os.environ.get("GH_USERNAME")
 
     if not all([token, repo_name, gh_username]):
-        print("Error: GITHUB_TOKEN, GITHUB_REPOSITORY, and GH_USERNAME must be set.")
+        print("Error: PAT_TOKEN, GITHUB_REPOSITORY, and GH_USERNAME must be set.")
         return
 
     g = Github(auth=github.Auth.Token(token))
@@ -48,7 +59,7 @@ def main():
     print(f"Switched to new branch: {branch_name}")
 
     # 2. Make changes and commit
-    num_commits = random.randint(1, 7) 
+    num_commits = random.randint(1, 20) 
     print(f"Generating {num_commits} commits.")
 
     for i in range(num_commits):
