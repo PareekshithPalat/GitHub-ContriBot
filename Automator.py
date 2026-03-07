@@ -4,77 +4,93 @@ Author : Pareekshith1 {Pareekshith.P}
 import os
 import random
 import sys
+import time
 from datetime import datetime
 from git import Repo
 from github import Github
 
 # Configuration
-REPO_PATH = os.getcwd() # Assumes script is run from root of repo
+REPO_PATH = os.getcwd()
 FILE_TO_UPDATE = "contribution_log.txt"
-BRANCH = "main"
 
-def git_commit(repo, message):
-    try:
-        repo.git.add(update=True)
-        repo.index.add([FILE_TO_UPDATE])
-        repo.index.commit(message)
-        print(f"Committed: {message}")
-    except Exception as e:
-        print(f"Error committing: {e}")
-
-def create_issue(github_token, repo_name):
-    try:
-        g = Github(github_token)
-        repo = g.get_repo(repo_name)
-        title = f"Automated Issue {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        body = "This is an automated issue created to increase activity."
-        issue = repo.create_issue(title=title, body=body)
-        print(f"Created issue: {issue.html_url}")
-    except Exception as e:
-        print(f"Error creating issue: {e}")
+def get_random_comment():
+    comments = [
+        "Great changes! LGTM.",
+        "Looks good to me. Ready to merge.",
+        "Nice work on this update.",
+        "Everything looks correct. Good job!",
+        "Verified the changes, they look solid.",
+        "Excellent improvements. Approved.",
+        "Clean code, thanks for the contribution.",
+        "This is exactly what was needed."
+    ]
+    return random.choice(comments)
 
 def main():
-    # 1. Setup Git Repo
-    try:
-        repo = Repo(REPO_PATH)
-    except Exception as e:
-        print(f"Error initializing repo: {e}")
+    token = os.environ.get("PAT_TOKEN")
+    repo_name = os.environ.get("GITHUB_REPOSITORY")
+    gh_username = os.environ.get("GH_USERNAME")
+
+    if not all([token, repo_name, gh_username]):
+        print("Error: GITHUB_TOKEN, GITHUB_REPOSITORY, and GH_USERNAME must be set.")
         return
 
-    # 2. Determine random number of contributions
-    # Range 1 to 10 commits per run
-    num_commits = random.randint(1, 10) 
-    print(f"Generating {num_commits} commits for today.")
+    g = Github(token)
+    remote_repo = g.get_repo(repo_name)
+    local_repo = Repo(REPO_PATH)
 
-    # 3. Loop and Commit
+    # 1. Create a unique branch
+    now_str = datetime.now().strftime('%Y%m%d%H%M%S')
+    branch_name = f"contribution-{now_str}"
+    new_branch = local_repo.create_head(branch_name)
+    new_branch.checkout()
+    print(f"Switched to new branch: {branch_name}")
+
+    # 2. Make changes and commit
+    num_commits = random.randint(1, 3) 
+    print(f"Generating {num_commits} commits.")
+
     for i in range(num_commits):
         with open(os.path.join(REPO_PATH, FILE_TO_UPDATE), "a") as f:
-            f.write(f"\nCorrection {i+1} on {datetime.now()}")
+            f.write(f"\nContribution {i+1} on {datetime.now()}")
         
-        git_commit(repo, f"Contribution {i+1}: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        local_repo.index.add([FILE_TO_UPDATE])
+        local_repo.index.commit(f"Contribution {i+1}: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    # 4. Push changes
-    # Use git command directly for push to avoid complex auth handling in python if args provided, 
-    # but since we are in Actions, we rely on the Action step to push usually, 
-    # OR we can try pushing here if configured.
-    # ideally, in GH Actions, we just commit here, and use `ad-m/github-push-action` or `git push` in yaml.
-    # But user asked for the "code" to do it.
-    # Let's simplify: The script commits locally. The Workflow will push.
-    # MUCH safer and standard for Actions. 
-    print("Commits created locally.")
+    # 3. Push the branch
+    print(f"Pushing branch {branch_name} to remote...")
+    origin = local_repo.remote(name='origin')
+    origin.push(branch_name)
 
-    # 5. Randomly create an issue (e.g., 20% chance)
-    if random.random() < 0.2:
-        token = os.environ.get("GITHUB_TOKEN")
-        # We need the repo name format "user/repo"
-        # Try to get it from git config or env
-        repo_name = os.environ.get("GITHUB_REPOSITORY")
-        
-        if token and repo_name:
-            print("Lucky Draw! Creating an issue...")
-            create_issue(token, repo_name)
-        else:
-            print("Skipping issue creation: GITHUB_TOKEN or GITHUB_REPOSITORY not found.")
+    # 4. Create an issue and assign to user
+    print("Creating issue...")
+    issue_title = f"Task for {datetime.now().strftime('%Y-%m-%d')}"
+    issue_body = "This issue is created automatically to track daily contributions."
+    issue = remote_repo.create_issue(title=issue_title, body=issue_body, assignee=gh_username)
+    print(f"Created issue #{issue.number} and assigned to {gh_username}")
+
+    # 5. Create PR
+    print("Creating Pull Request...")
+    pr_title = f"Feature: Contribution {datetime.now().strftime('%Y-%m-%d')}"
+    pr_body = f"This PR addresses the work for today.\n\nCloses #{issue.number}"
+    pr = remote_repo.create_pull(title=pr_title, body=pr_body, base="main", head=branch_name)
+    print(f"Created PR #{pr.number}: {pr.html_url}")
+
+    # Wait a bit for GitHub to process
+    time.sleep(5)
+
+    # 6. Make a random review/comment
+    print("Submitting automated review...")
+    pr.create_review(body=get_random_comment(), event="APPROVE")
+    print("Review submitted.")
+
+    # 7. Merge the PR
+    print("Merging PR...")
+    merge_status = pr.merge(merge_method="squash", commit_message=f"Merged automated contribution PR #{pr.number}")
+    if merge_status.merged:
+        print(f"PR #{pr.number} merged successfully!")
+    else:
+        print(f"Failed to merge PR #{pr.number}: {merge_status.message}")
 
 if __name__ == "__main__":
     main()

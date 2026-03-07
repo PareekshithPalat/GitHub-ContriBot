@@ -1,6 +1,9 @@
 name: Daily Contribution
 
 on:
+    push:
+        branches:
+            - main
     schedule:
         - cron: "30 2 * * *" # Run daily at 02:30 UTC
     workflow_dispatch: # Allow manual trigger
@@ -33,13 +36,13 @@ jobs:
 
             - name: Run Automator Script
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
                   GITHUB_REPOSITORY: ${{ github.repository }}
+                  GH_USERNAME: ${{ secrets.COMMIT_USERNAME }}
               run: |
                   python Automator.py
 
-            - name: Push changes
-              uses: ad-m/github-push-action@master
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  branch: ${{ github.ref }}
+            - name: Cleanup
+              run: |
+                   git checkout main
+                   git pull origin main
