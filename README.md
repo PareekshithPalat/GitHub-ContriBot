@@ -1,84 +1,82 @@
-# GitHub Contribution Bot 🤖
-
-Automate your GitHub contribution graph with intelligent daily commits and random issue creation. This bot runs on **GitHub Actions** to keep your profile active effortlessly.
-
-## 📊 Before & After
+![GitHub-ContriBot Banner](assets/banner.png)
 
 <div align="center">
 
-### Before Using Bot
-![Sparse GitHub Contributions](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fadrianroselli.com%2Fwp-content%2Fuploads%2F2018%2F02%2FGitHub-chart_scrollbar.png&f=1&nofb=1&ipt=82696987c41c0241e6bee6d06c6263e826fc498a0d79c91af05086026d6039ae)
-*Minimal contribution activity*
+# GitHub-ContriBot
+**Enterprise-Grade Contribution Lifecycle Automation**
 
-### After Using Bot
-![Active GitHub Contributions](https://miro.medium.com/v2/resize:fit:1100/format:webp/1*1tUp8vKCZDVtNIJY6A-Ilg.png)
-*Consistent daily contributions!*
+![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 </div>
 
-## ✨ Features
+## Overview
 
-- **Automated Daily Commits**: Random commits (1-10 per day) directly to the repository.
-- **Random Issue Creation**: 20% chance to create a random issue to simulate deeper activity.
-- **GitHub Actions Support**: Runs automatically in the cloud. No need to keep your PC on.
-- **Easy Setup**: Just Fork and Enable!
+GitHub-ContriBot is a high-performance automation utility designed to manage and optimize developer presence on GitHub. Unlike standard contribution bots, this system automates a **complete development lifecycle**, ensuring that your activity graph reflects authentic, multi-layered engagement including branches, commits, issues, pull requests, and peer reviews.
 
-## 🚀 Quick Start (GitHub Actions)
+## Core Capabilities
 
-1. **Fork this repository** to your own GitHub account.
-2. Go to the **Actions** tab in your forked repository.
-3. If prompt appears, click **"I understand my workflows, go ahead and enable them"**.
-4. The bot will now run automatically every day at 02:30 UTC.
+The Version 2.0 engine implements a sophisticated "Lifecycle Automation" pattern for every execution sequence:
 
-(Optional) To trigger it immediately:
-- Go to **Actions** -> **Daily Contribution**.
-- Click **Run workflow**.
+- **Branch Isolation**: Every run initializes a unique, timestamped branch (e.g., `contribution-20240308...`) to maintain repository integrity.
+*   **Contribution Scale**: Generates a random number of commits (**1 to 20**) per run to simulate varying levels of daily project work.
+- **Issue Management**: Automatically generates a project tracking issue for each run, assigns it to your account, and applies custom labels.
+- **Pull Request Automation**: Orchestrates a PR linking the branch to `main`, complete with "Closes #Issue" syntax for automatic tracking.
+- **Automated Interaction**: Posts randomized, professional code review comments to the PR before finalizing.
+- **Auto-Merge**: Finalizes the lifecycle by merging the PR into the production branch and cleaning up.
 
-## 💻 Manual / Local Usage
+## Strict Scheduling
 
-If you prefer to run it locally:
+To ensure your activity aligns with professional working hours, the system maintains a strict temporal lock:
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/yourusername/GitHub_Contributor_bot.git
-   cd GitHub_Contributor_bot
-   ```
+- **Execution Windows**: The bot is programmed to execute only during two specific windows:
+    - **10:00 AM IST** (04:30 UTC)
+    - **09:00 PM IST** (15:30 UTC)
+- **Synchronized Cron**: The integrated GitHub Actions workflow is precision-tuned to trigger exactly at these intervals.
 
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+## Setup & Implementation
 
-3. **Run the bot**:
-   ```bash
-   python Automator.py
-   ```
-   *Note: For Issue creation to work locally, you must set `GITHUB_TOKEN` and `GITHUB_REPOSITORY` environment variables.*
+Follow these steps to deploy the GitHub-ContriBot enterprise solution to your account:
 
-## ⚙️ Configuration
+### 1. Preparation
+1.  **Fork** this repository to your GitHub profile.
+2.  Enable **GitHub Actions** in the "Actions" tab of your fork.
 
-You can customize the bot by editing `Automator.py`:
+### 2. Authentication Configuration (Crucial)
+To permit the bot to perform PR merges and reviews on your behalf, a Personal Access Token (PAT) is required.
 
-- **Commit frequency**: Change `random.randint(1, 10)` in `main()`.
-- **Issue chance**: Change `if random.random() < 0.2:` (currently 20%).
+1.  Generate a **Personal Access Token (Classic)** at [GitHub Settings](https://github.com/settings/tokens).
+2.  Select the following scopes:
+    -   `repo` (Full control of repositories)
+    -   `workflow` (Update GitHub Action workflows)
+3.  Navigate to your repository **Settings > Secrets and variables > Actions**.
+4.  Add the following **Repository Secrets**:
+    -   `PAT_TOKEN`: Paste your generated token here.
+    -   `COMMIT_USERNAME`: Your GitHub username.
+    -   `COMMIT_EMAIL`: Your GitHub email address.
 
-## ⚠️ Important Notes
+### 3. Automated Deployment
+Once the secrets are configured, the bot will automatically trigger based on the defined schedule. No further manual intervention is required.
 
-- **Educational Purpose**: This tool is for demonstration and testing.
-- **Green Activity Bar**: Helps fill up your contribution graph.
+## Configuration
 
-## 🤝 Contributing
+Custom parameters can be adjusted in `Automator.py`:
 
-Contributions are welcome! Feel free to:
-- Report bugs
-- Suggest new features
-- Submit pull requests
+| Parameter | Location | Description |
+| :--- | :--- | :--- |
+| Commit Range | `random.randint(1, 20)` | Controls the minimum and maximum commits per session. |
+| Time Slots | `["04:30", "15:30"]` | Defines the allowed UTC execution windows. |
+| Labels | `labels=["updation"]` | Sets the default labels for issues and PRs. |
 
-## 📄 License
+## License
 
-This project is open source.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for full details.
 
-## 👤 Author
+## Author
 
-**Pareekshith P**
-- GitHub: [@Pareekshith1](https://github.com/Pareekshith1)
+**Pareekshith Palat**
+-   **GitHub**: [@Pareekshith1](https://github.com/Pareekshith1)
+-   **Email**: [Your Email Here]
+
+---
+*Disclaimer: Use this tool responsibly. It is designed for environment testing and profile maintenance.*
