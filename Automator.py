@@ -32,11 +32,15 @@ def main():
     # 10:00 IST = 04:30 UTC
     # 21:00 IST = 15:30 UTC
     now = datetime.utcnow()
-    current_time_str = now.strftime("%H:%M")
+    # 04:30 - 04:31 UTC (10:00 - 10:01 AM IST)
+    # 15:30 - 15:31 UTC (09:00 - 09:01 PM IST)
+    is_morning_slot = now.hour == 4 and (30 <= now.minute <= 31)
+    is_evening_slot = now.hour == 15 and (30 <= now.minute <= 31)
+    test_mode = os.environ.get("TEST_MODE") == "true"
     
-    # Strictly allow only 04:30 and 15:30 UTC
-    if current_time_str not in ["04:30", "15:30"]:
-        print(f"Current time {current_time_str} UTC is not in allowed slots (04:30 or 15:30 UTC). Exiting.")
+    if not (is_morning_slot or is_evening_slot or test_mode):
+        current_time_str = now.strftime("%H:%M")
+        print(f"Current time {current_time_str} UTC is outside allowed windows (10:00-10:01 or 21:00-21:01 IST). Exiting.")
         return
 
     token = os.environ.get("PAT_TOKEN")
