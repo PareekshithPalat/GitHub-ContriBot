@@ -4,6 +4,12 @@ on:
     schedule:
         - cron: "30 4,15 * * *" # Runs at 10:00 IST and 21:00 IST
     workflow_dispatch: # Allow manual trigger
+        inputs:
+            test_mode:
+                description: 'Run in test mode (bypass time check)?'
+                required: false
+                default: false
+                type: boolean
 
 jobs:
     build:
@@ -36,6 +42,7 @@ jobs:
                   PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
                   GITHUB_REPOSITORY: ${{ github.repository }}
                   GH_USERNAME: ${{ secrets.COMMIT_USERNAME }}
+                  TEST_MODE: ${{ github.event.inputs.test_mode }}
               run: |
                   python Automator.py
 
