@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 
 import github
 from git import Repo
+from github import GithubException
 from github import Github
 
 REPO_PATH = os.getcwd()
@@ -26,6 +27,29 @@ def get_random_review():
         "Automated review completed successfully.",
     ]
     return random.choice(comments)
+
+
+def submit_review(pr):
+    review_body = get_random_review()
+    try:
+        pr.create_review(body=review_body, event="APPROVE")
+        print(f"Approved PR #{pr.number}")
+    except GithubException as exc:
+        errors = exc.data.get("errors", []) if isinstance(exc.data, dict) else []
+        if exc.status == 422 and any(
+            "approve your own pull request" in str(error).lower() for error in errors
+        ):
+            pr.create_review(
+                body=(
+                    f"{review_body}\n\n"
+                    "GitHub does not allow approving your own pull request, "
+                    "so this run submitted a review comment instead."
+                ),
+                event="COMMENT",
+            )
+            print(f"Submitted review comment for PR #{pr.number}")
+            return
+        raise
 
 
 def state_file_path():
@@ -129,8 +153,7 @@ def run_cycle(local_repo, remote_repo, gh_username, cycle_number):
     pr.add_to_labels(*LABELS)
     print(f"Created PR #{pr.number}: {pr.html_url}")
 
-    pr.create_review(body=get_random_review(), event="APPROVE")
-    print(f"Approved PR #{pr.number}")
+    submit_review(pr)
 
     merge_status = pr.merge(
         merge_method="squash",
