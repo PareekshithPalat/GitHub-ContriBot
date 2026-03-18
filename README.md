@@ -277,7 +277,7 @@ This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for f
 
 **Pareekshith Palat**
 
-- **GitHub**: [@Pareekshithpalat](https://github.com/Pareekshith1)
+- **GitHub**: [PareekshithPalat](https://github.com/PareekshithPalat)
 - **Email**: pareekshithpalat@gmail.com
 
 ---
