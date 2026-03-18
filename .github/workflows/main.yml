@@ -2,25 +2,26 @@ name: Daily Contribution
 
 on:
     schedule:
-        - cron: "30 4,15 * * *" # Runs at 10:00 IST and 21:00 IST
-    workflow_dispatch: # Allow manual trigger
-        inputs:
-            test_mode:
-                description: 'Run in test mode (bypass time check)?'
-                required: false
-                default: false
-                type: boolean
+        - cron: "0 * * * *" # Runs hourly; script enforces the daily random quota
+    workflow_dispatch:
+
+concurrency:
+    group: contrib-bot
+    cancel-in-progress: false
 
 jobs:
     build:
         runs-on: ubuntu-latest
         permissions:
-            contents: write # Needed to push commits
-            issues: write # Needed to create issues
+            contents: write
+            issues: write
+            pull-requests: write
 
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
 
             - name: Set up Python
               uses: actions/setup-python@v4
@@ -42,11 +43,5 @@ jobs:
                   PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
                   GITHUB_REPOSITORY: ${{ github.repository }}
                   GH_USERNAME: ${{ secrets.COMMIT_USERNAME }}
-                  TEST_MODE: ${{ github.event.inputs.test_mode }}
               run: |
                   python Automator.py
-
-            - name: Cleanup
-              run: |
-                   git checkout main
-                   git pull origin main
