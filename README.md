@@ -6,7 +6,7 @@
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-![GitHub-ContriBot Banner](assets/banner.png)
+![GitHub-ContriBot Banner](assets/botbanner.png)
 
 </div>
 
